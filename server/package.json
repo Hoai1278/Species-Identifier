@@ -1,0 +1,24 @@
+{
+  "name": "image-analyzer",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node .",
+    "dev": "nodemon ."
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@google/generative-ai": "^0.21.0",
+    "assert": "^2.1.0",
+    "dotenv": "^16.4.5",
+    "node-fetch": "^3.3.2",
+    "socket.io": "^4.8.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.7"
+  }
+}
