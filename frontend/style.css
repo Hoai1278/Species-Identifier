@@ -4,7 +4,7 @@ body {
     background-color: #00576f;
     margin: 0;
     padding: 0;
-    font-family: Arial, sans-serif;
+    font-family: Helvetica;
 }
 ul {
     display: block;
@@ -16,8 +16,25 @@ ul {
     margin-right: 5px;
 }
 
+input[type="file"] {
+    display: None;
+}
+
+label {
+    display: inline;
+    background-color: white;
+    text-align: center;
+    color: #28afd8;
+    border: 5px solid #28afd8;
+    border-radius: 5px;
+    padding: 6px;
+    margin-bottom: 10px;
+    width: 680px;
+    vertical-align: middle;
+}
+
 .container {
-    max-width: 400px;
+    max-width: 700px;
     margin: 50px auto;
     padding: 20px;
     background-color: white;
@@ -26,6 +43,7 @@ ul {
 }
 
 .logo {
+    font: Helvetica;
     text-align: center;
     font-size: 24px;
     font-weight: bold;
@@ -37,6 +55,7 @@ ul {
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin: auto;
 }
 
 .input {
@@ -44,7 +63,8 @@ ul {
     border-radius: 5px;
     padding: 10px;
     margin-bottom: 10px;
-    width: 100%;
+    width: 680px;
+    vertical-align: middle;
 }
 
 .button {
@@ -62,7 +82,7 @@ ul {
     border: 1px solid #ccc;
     border-radius: 5px;
     padding: 10px;
-    height: 200px;
+    height: 300px;
     overflow-y: scroll;
 }
 
