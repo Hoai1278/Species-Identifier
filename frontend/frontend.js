@@ -26,11 +26,10 @@ function sendMessage(e) {
 document.querySelector('form')
     .addEventListener('submit', sendMessage)
 
-socket.on('message', (data, URI) => {
+socket.on('message', (data) => {
     const li = document.createElement('li')
     /*const img = new Image()
     img.src = `data:image/*;base64,${ image }` */
     li.textContent = data
-    li.textContent = URI
     document.querySelector('ul').appendChild(li)
 })
