@@ -23,7 +23,7 @@ io.on('connection', async socket => {
     console.log(`User ${socket.id} connected`)
     socket.on('message', async (data, image) => {
         if (data == "default") {
-            data = "Identify the species of this organism by only stating its common name, scientific name, habitat and margin of error"
+            data = "Identify the species of this organism by only stating its in this format; Common name: (its common name) Scientific name: (its scientific name in italics) Habitat: (habitat). Mrgin of error: (%)"
         }
         const imagePart = await fetch(`${image}`)
         .then((response) => response.arrayBuffer())
@@ -49,7 +49,7 @@ io.on('connection', async socket => {
             'Caption this image.',
         ]);
         console.log(result.response.text()); */
-        model
+        /*model
         .generateContentStream([data, img])
         .then(async (result) => {
             for await (const chunk of result.stream) {
@@ -66,8 +66,13 @@ io.on('connection', async socket => {
         })
         .catch((err) => {
             console.error("Error generating content:", err.message)
-        })
+        }) */
         //io.emit('image', image.toString('base64'))
+        const result = await model.generateContent([data, img])
+        console.log(result.response.text())
+        socket.emit("message", result.response.text())
+        socket.emit("message", "\n-------------------------------------------------------\n")
+
     })
 })
 
