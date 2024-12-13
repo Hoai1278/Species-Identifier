@@ -1,9 +1,9 @@
 const socket = io("ws://localhost:3500")
 
 function sendMessage(e) {
-    e.preventDefault()
+    //e.preventDefault()
     const input1 = document.querySelector('.input1')
-    const input2 = document.getElementById('URI')
+    const input2 = document.querySelector('.input2')
     /*const image = document.getElementById('img').addEventListener('change', function() {
         const reader = new FileReader()
         reader.onload = function() {
@@ -11,15 +11,18 @@ function sendMessage(e) {
             socket.emit('image', base64)
         }
     }, false)*/
-    if (input1.value) {
-        socket.emit('message', input1.value)
-        input1.value = ""
+    if (!input1.value) {
+        input1.value = "default"
     }
-    input1.focus()
-    if (input2.value) {
-        socket.emit('URI', input2.value)
+    if (!input2.value) {
+        e.preventDefault()
+    }
+    if (input1.value && input2.value) {
+        socket.emit('message', input1.value, input2.value)
+        input1.value = ""
         input2.value = ""
     }
+    input1.focus()
     input2.focus()
 }
 

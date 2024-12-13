@@ -13,10 +13,19 @@ const io = new Server(httpServer, {
     }
 })
 
+function bold(text) {
+    var bold = /\*\*(.*?)\*\*/gm
+    var Bold_text = text.replace(bold, '<strong>$1/<strong>')
+    return Bold_text
+}
+
 io.on('connection', async socket => {
     console.log(`User ${socket.id} connected`)
     socket.on('message', async (data, image) => {
-        const imagePart = await fetch(`https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSFBgu1_jkLOO4SHkOqiOYj7f8zfraaHJ0nnA&s`)
+        if (data == "default") {
+            data = "Identify the species of this organism by only stating its common name, scientific name, habitat and margin of error"
+        }
+        const imagePart = await fetch(`${image}`)
         .then((response) => response.arrayBuffer())
         console.log(data, imagePart)
         const img = {
@@ -40,7 +49,7 @@ io.on('connection', async socket => {
             'Caption this image.',
         ]);
         console.log(result.response.text()); */
-        await model
+        model
         .generateContentStream([data, img])
         .then(async (result) => {
             for await (const chunk of result.stream) {
@@ -48,10 +57,12 @@ io.on('connection', async socket => {
                 console.log(data)
                 //io.emit("message", `${ data }`)
                 console.log(chunkText)
-                //socket.emit("content", chunkText)
+                socket.emit("content", chunkText)
                 io.emit("message", chunkText)
             }
-            //socket.emit("content", "end of content")
+            const EndLine = "\n--------------------------------------------\n"
+            socket.emit("content", "end of content")
+            socket.emit("message", EndLine)
         })
         .catch((err) => {
             console.error("Error generating content:", err.message)
