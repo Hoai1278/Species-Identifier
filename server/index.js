@@ -7,17 +7,17 @@ import dotenv from 'dotenv'
 dotenv.config()
 
 const genAI = new GoogleGenerativeAI(process.env.API_KEY);
-const model = genAI.getGenerativeModel({ model: "gemini-1.5-pro" });
+/*const model = genAI.getGenerativeModel({ model: "gemini-1.5-pro" });*/
+const model = genAI.getGenerativeModel({
+    model: "gemini-2.0-flash-exp",
+})
 const io = new Server(httpServer, {
     cors: {
         orgin: process.env.NODE_ENV === "production" ? false : ["http://localhost:5500", "http://127.0.0.1:5500"]
     }
 })
-
-function bold(text) {
-    var bold = /\*\*(.*?)\*\*/gm
-    var Bold_text = text.replace(bold, '<strong>$1/<strong>')
-    return Bold_text
+const generationConfig= {
+    "temperature": 0.1,
 }
 
 io.on('connection', async socket => {
@@ -69,7 +69,16 @@ io.on('connection', async socket => {
             console.error("Error generating content:", err.message)
         }) */
         //io.emit('image', image.toString('base64'))
-        const result = await model.generateContent([data, img])
+        /*const result = await model.generateContent([data, img])
+        .catch((err) => {
+            console.error("Error generating content:", err.message)
+        })*/
+        const chatSession = model.startChat({
+            generationConfig,
+            history: [
+            ],
+        })
+        const result = await chatSession.sendMessage([data, img])
         console.log(result.response.text())
         socket.emit("message", result.response.text())
         socket.emit("message", "\n-------------------------------------------------------\n")
