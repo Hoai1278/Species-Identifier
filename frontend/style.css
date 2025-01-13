@@ -17,9 +17,6 @@ ul {
     margin-right: 5px;
 }
 
-input[type="file"] {
-    display: None;
-}
 
 label {
     display: inline;

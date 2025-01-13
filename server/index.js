@@ -1,9 +1,12 @@
 //final
+import { createRequire } from "module";
+const require = createRequire(import.meta.url);
 import { createServer } from "http"
 import { Server } from "socket.io"
 import { GoogleGenerativeAI } from "@google/generative-ai"
 const httpServer = createServer()
 import dotenv from 'dotenv'
+const fs = require('fs')
 dotenv.config()
 
 const genAI = new GoogleGenerativeAI(process.env.API_KEY);
@@ -22,19 +25,28 @@ const generationConfig= {
 
 io.on('connection', async socket => {
     console.log(`User ${socket.id} connected`)
-    socket.on('message', async (data, image) => {
-        if (data == "default") {
+    socket.on('message', async (data, image_URL, image_file) => {
+        if (data == "!!//default") {
             data = "Identify the species of this organism by only stating its in this format; Common name: (its common name) Scientific name: (its scientific name in italics) Habitat: (habitat). Mrgin of error: (%)"
         }
-        const imagePart = await fetch(`${image}`)
-        .then((response) => response.arrayBuffer())
-        console.log(data, imagePart)
-        const img = {
+        var imagePart
+        var img
+        if (image_URL != "//none") {
+            imagePart = await fetch(`${image_URL}`)
+            .then((response) => response.arrayBuffer())
+            img = {
             inlineData: {
                 data: Buffer.from(imagePart).toString("base64"),
                 mimeType: "image/*",
-            },
-        } /*
+                },
+            }
+        }
+        else {
+            imagePart = image_file
+            img = image_file
+        }
+        console.log(data, imagePart)
+         /*
         const imageResp = await fetch(
             'https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Palace_of_Westminster_from_the_dome_on_Methodist_Central_Hall.jpg/2560px-Palace_of_Westminster_from_the_dome_on_Methodist_Central_Hall.jpg'
         )
@@ -79,6 +91,9 @@ io.on('connection', async socket => {
             ],
         })
         const result = await chatSession.sendMessage([data, img])
+        .catch((err) => {
+            console.error("Error generating content:", err.message)
+        })
         console.log(result.response.text())
         socket.emit("message", result.response.text())
         socket.emit("message", "\n-------------------------------------------------------\n")
