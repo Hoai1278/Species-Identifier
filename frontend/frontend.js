@@ -40,8 +40,9 @@ document.querySelector('form')
 
 socket.on('message', (data) => {
     const li = document.createElement('li')
-    /*const img = new Image()
-    img.src = `data:image/*;base64,${ image }` */
     li.textContent = data
     document.querySelector('ul').appendChild(li)
+    let img = document.createElement("img")
+    img.src = input2.value
+    document.body.appendChild(img)
 })
