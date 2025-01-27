@@ -10,7 +10,6 @@ const fs = require('fs')
 dotenv.config()
 
 const genAI = new GoogleGenerativeAI(process.env.API_KEY);
-/*const model = genAI.getGenerativeModel({ model: "gemini-1.5-pro" });*/
 const model = genAI.getGenerativeModel({
     model: "gemini-2.0-flash-exp",
 })
@@ -25,7 +24,7 @@ const generationConfig= {
 
 io.on('connection', async socket => {
     console.log(`User ${socket.id} connected`)
-    socket.on('message', async (data, image_URL, image_file) => {
+    socket.on('message', async (data, image_URL) => {
         if (data == "!!//default") {
             data = "Identify the species of this organism by only stating its in this format; Common name: (its common name) Scientific name: (its scientific name in italics) Habitat: (habitat). Mrgin of error: (%)"
         }
@@ -41,50 +40,7 @@ io.on('connection', async socket => {
                 },
             }
         }
-        else {
-            imagePart = image_file
-            img = image_file
-        }
         console.log(data, imagePart)
-         /*
-        const imageResp = await fetch(
-            'https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Palace_of_Westminster_from_the_dome_on_Methodist_Central_Hall.jpg/2560px-Palace_of_Westminster_from_the_dome_on_Methodist_Central_Hall.jpg'
-        )
-            .then((response) => response.arrayBuffer());
-        
-        const result = await model.generateContent([
-            {
-                inlineData: {
-                    data: Buffer.from(imageResp).toString("base64"),
-                    mimeType: "image/jpeg",
-                },
-            },
-            'Caption this image.',
-        ]);
-        console.log(result.response.text()); */
-        /*model
-        .generateContentStream([data, img])
-        .then(async (result) => {
-            for await (const chunk of result.stream) {
-                const chunkText = chunk.text()
-                console.log(data)
-                //io.emit("message", `${ data }`)
-                console.log(chunkText)
-                socket.emit("content", chunkText)
-                io.emit("message", chunkText)
-            }
-            const EndLine = "\n--------------------------------------------\n"
-            socket.emit("content", "end of content")
-            socket.emit("message", EndLine)
-        })
-        .catch((err) => {
-            console.error("Error generating content:", err.message)
-        }) */
-        //io.emit('image', image.toString('base64'))
-        /*const result = await model.generateContent([data, img])
-        .catch((err) => {
-            console.error("Error generating content:", err.message)
-        })*/
         const chatSession = model.startChat({
             generationConfig,
             history: [
