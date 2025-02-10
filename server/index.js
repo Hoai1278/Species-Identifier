@@ -6,7 +6,7 @@ import { Server } from "socket.io"
 import { GoogleGenerativeAI } from "@google/generative-ai"
 const httpServer = createServer()
 import dotenv from 'dotenv'
-const fs = require('fs')
+const imageToBase64 = require('image-to-base64')
 dotenv.config()
 
 const genAI = new GoogleGenerativeAI(process.env.API_KEY);

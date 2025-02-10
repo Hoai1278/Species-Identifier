@@ -15,11 +15,12 @@
     "@google/generative-ai": "^0.21.0",
     "assert": "^2.1.0",
     "dotenv": "^16.4.5",
+    "image-to-base64": "^2.2.0",
     "node-fetch": "^3.3.2",
     "socket.io": "^4.8.1"
   },
   "devDependencies": {
     "nodemon": "^3.1.7",
-    "typescipt": "^4.9.5"
+    "typescript": "^4.9.5"
   }
 }
